@@ -1,36 +1,48 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { svg_element } from 'svelte/internal';
+  import Rect from './Rect.svelte';
   // export let name: string;
-  let canvas: HTMLCanvasElement;
-  let ctx;
+  // let canvas: HTMLCanvasElement;
+  // let ctx;
   // Loads all into corresponding canvas
 
-  const imageSrc = 'seven.jpg';
+  const imageSrc = 'fiveplus.png';
+  let imageArray: HTMLImageElement[] = [];
+  
+  // interface boundingBox = {}
 
-  onMount(async () => {
-    const image = await loadNewImage(imageSrc);
-    // Load canvas stuff
-    canvas = document.getElementById('canvas') as HTMLCanvasElement;
-    canvas.width = image.naturalWidth;
-    canvas.height = image.naturalHeight;
-    ctx = canvas.getContext('2d');
-    // Draw image to canvas
-    // ctx.drawImage(image, 0, 0);
-    ctx.drawImage(
-      image,
-      0,
-      0,
-      image.naturalWidth,
-      image.naturalHeight,
-      0,
-      0,
-      canvas.width,
-      canvas.height
-    );
+  const boundingBoxes = [
+    { x0: 0, y0: 0, x1: 500, y1: 250 },
+    { x0: 800, y0: 800, x1: 1600, y1: 1800 },
+    { x0: 2000, y0: 1500, x1: 3000, y1: 200 },
+    { x0: 1357, y0: 230, x1: 2000, y1: 500 },
+    { x0: 250, y0: 314, x1: 1000, y1: 600 },
+  ];
 
-    // ctx.fillRect(0,0,500,500);
-  });
+  const addImage = async () => {
+    imageArray = [...imageArray, await loadNewImage(imageSrc)];
+  };
+
+  // const image = await loadNewImage(imageSrc);
+  // imageArray.push(image);
+  // Load canvas stuff
+  // canvas = document.getElementById('canvas') as HTMLCanvasElement;
+  // canvas.width = image.naturalWidth;
+  // canvas.height = image.naturalHeight;
+  // ctx = canvas.getContext('2d');
+  // Draw image to canvas
+  // ctx.drawImage(image, 0, 0);
+  // ctx.drawImage(
+  //   image,
+  //   0,
+  //   0,
+  //   image.naturalWidth,
+  //   image.naturalHeight,
+  //   0,
+  //   0,
+  //   canvas.width,
+  //   canvas.height
+  // );
+  // ctx.fillRect(0,0,500,500);
   // Loads new image
   const loadNewImage = (src: string): Promise<HTMLImageElement> =>
     new Promise((resolve) => {
@@ -46,7 +58,7 @@
     margin: 0;
   }
 
-  body {
+  main {
     max-width: 100vw;
     max-height: 100vh;
     width: 100vw;
@@ -79,34 +91,34 @@
     /* max-height: calc(100% - 2rem); */
   }
 
-  img {
-    flex: 1;
-    object-fit: contain;
-  }
+  // img {
+  //   flex: 1;
+  //   object-fit: contain;
+  // }
 
-  canvas {
-    flex: 1;
-    object-fit: contain;
-    /* display: block; */
-    /* flex: 0 0 100%; */
-    // vertical-align: bottom;
-    /* width: 100%; */
-    /* height: 0; */
-    /* max-width: 100%;
+  // canvas {
+  //   flex: 1;
+  //   object-fit: contain;
+  /* display: block; */
+  /* flex: 0 0 100%; */
+  // vertical-align: bottom;
+  /* width: 100%; */
+  /* height: 0; */
+  /* max-width: 100%;
     max-height: 100% */
-    /* width: 100%;
+  /* width: 100%;
     height: 100%; */
-    /* max-width: 100%;
+  /* max-width: 100%;
     max-height: 100%; */
-    /* object-fit: cover; */
-    /* width: 100vw;
+  /* object-fit: cover; */
+  /* width: 100vw;
     height: 100vh; */
-    /* align-self: center; */
-  }
+  /* align-self: center; */
+  // }
 
   svg {
-    flex: 1;
-    object-fit: contain;
+    // flex: 1;
+    // object-fit: contain;
     // background: url('../seven.jpg');
     // display: flex;
     // flex: 1;
@@ -115,10 +127,10 @@
   }
 
   image {
-    display: block;
+    // display: block;
     // flex: 1;
     // display: block;
-    // vertical-align: bottom;
+    vertical-align: bottom;
     // object-fit: contain;
     // flex: 1;
     // display: block;
@@ -155,23 +167,21 @@
 </svelte:head>
 
 <main>
-  <body>
-    <div style="width: 100%; height: 100%">
-      <div class="wrapper">
-        <div class="header">HELLO WORLD</div>
-        <div id="header1" class="headerType">
-          <img id="img" src={imageSrc} alt="bob123" />
-        </div>
-        <div id="header2" class="headerType"><canvas id="canvas" /></div>
-        <div id="header3" class="headerType">
-          <svg
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 1000 523"
-            id="svg">
-            <image width="1000" height="523" xlink:href={imageSrc} />
-          </svg>
-        </div>
-      </div>
+  <div class="wrapper">
+    <div class="header">
+      HELLO WORLD
+      <button on:click={addImage}>ADD NEW IMAGE BOI</button>
     </div>
-  </body>
+    {#each imageArray as image}
+      <div class="headerType">
+        <svg viewBox="0 0 {image.naturalWidth} {image.naturalHeight}">
+          <image
+            width={image.naturalWidth}
+            height={image.naturalHeight}
+            xlink:href={image.src} />
+          <Rect {boundingBoxes} />
+        </svg>
+      </div>
+    {/each}
+  </div>
 </main>
