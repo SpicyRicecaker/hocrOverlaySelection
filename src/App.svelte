@@ -84,7 +84,7 @@
   .headerType {
     background-color: aliceblue;
     flex: 1;
-    display: flex;
+    // display: flex;
     // flex-direction: column;
     overflow: auto;
     /* flex-basis: 50px; */
@@ -179,7 +179,7 @@
             width={image.naturalWidth}
             height={image.naturalHeight}
             xlink:href={image.src} />
-          <Rect {boundingBoxes} />
+          <!-- <Rect {boundingBoxes} /> -->
         </svg>
       </div>
     {/each}
